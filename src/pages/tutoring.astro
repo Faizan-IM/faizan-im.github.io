@@ -31,6 +31,7 @@ const details = [
 // Booking link: use a configured contact method if set, else fall back to email.
 const contactHref =
   TUTORING.contact ?? `mailto:${SITE.email}?subject=${encodeURIComponent('O/A Level tutoring enquiry')}`;
+const waHref = `${SITE.whatsapp}?text=${encodeURIComponent("Hi, I'd like to ask about O/A Level tutoring.")}`;
 ---
 
 <Layout title={title} description={description}>
@@ -48,6 +49,9 @@ const contactHref =
       </p>
       <div class="hero-actions">
         <a href={contactHref} class="btn btn-primary">Get in touch about tutoring</a>
+        <a href={waHref} class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+          Message on WhatsApp
+        </a>
       </div>
     </div>
   </section>
@@ -99,7 +103,8 @@ const contactHref =
     text="Tell me your child’s board, subjects, and where they’re finding things tricky — I’ll reply personally with how I can help."
     primaryHref={contactHref}
     primaryLabel="Get in touch about tutoring"
-    secondaryHref={null}
+    secondaryHref={waHref}
+    secondaryLabel="Message on WhatsApp"
   />
 </Layout>
 

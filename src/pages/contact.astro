@@ -10,6 +10,7 @@ const description =
 const methods = [
   { key: 'email', label: 'Email', value: SITE.email, href: `mailto:${SITE.email}`, external: false },
   { key: 'phone', label: 'Phone', value: SITE.phoneDisplay, href: `tel:${SITE.phone}`, external: false },
+  { key: 'whatsapp', label: 'WhatsApp', value: 'wa.me/923136564449', href: SITE.whatsapp, external: true },
   SOCIAL.linkedin && { key: 'linkedin', label: 'LinkedIn', value: 'in/faizan-iqbal-masood', href: SOCIAL.linkedin, external: true },
   SOCIAL.github && { key: 'github', label: 'GitHub', value: 'github.com/Faizan-IM', href: SOCIAL.github, external: true },
 ].filter(Boolean) as { key: string; label: string; value: string; href: string; external: boolean }[];
