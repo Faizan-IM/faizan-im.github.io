@@ -58,6 +58,7 @@ const personLd = {
   affiliation: { '@type': 'CollegeOrUniversity', name: SITE.affiliation },
   knowsAbout: SITE.knowsAbout,
   email: `mailto:${SITE.email}`,
+  telephone: SITE.phone,
   ...(sameAs.length ? { sameAs } : {}),
 };
 ---

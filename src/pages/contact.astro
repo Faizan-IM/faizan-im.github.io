@@ -9,6 +9,7 @@ const description =
 
 const methods = [
   { key: 'email', label: 'Email', value: SITE.email, href: `mailto:${SITE.email}`, external: false },
+  { key: 'phone', label: 'Phone', value: SITE.phoneDisplay, href: `tel:${SITE.phone}`, external: false },
   SOCIAL.linkedin && { key: 'linkedin', label: 'LinkedIn', value: 'in/faizan-iqbal-masood', href: SOCIAL.linkedin, external: true },
   SOCIAL.github && { key: 'github', label: 'GitHub', value: 'github.com/Faizan-IM', href: SOCIAL.github, external: true },
 ].filter(Boolean) as { key: string; label: string; value: string; href: string; external: boolean }[];
@@ -46,7 +47,7 @@ const methods = [
                   >
                     <span class="method-label font-mono">{m.label}</span>
                     <span class="method-value">{m.value}</span>
-                    <span class="method-arrow" aria-hidden="true">↗</span>
+                    <span class="method-arrow" aria-hidden="true">{m.external ? '↗' : '→'}</span>
                   </a>
                 </li>
               ))

@@ -18,6 +18,10 @@ export const SITE = {
   jobTitle: 'Software Engineer & Researcher',
   /** {{EMAIL}} — from the owner's existing public contact section. */
   email: 'mfaizanim@gmail.com',
+  /** Phone in E.164 form (for tel: links). */
+  phone: '+923136564449',
+  /** Phone formatted for display. */
+  phoneDisplay: '+92 313 6564449',
   /** {{SITE_DOMAIN}} — this repo is faizan-im.github.io (user site). No trailing slash. */
   domain: 'https://faizan-im.github.io',
   /** {{LOCATION_DISPLAY}} */
