@@ -1,0 +1,169 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+import CTA from '../components/CTA.astro';
+import { SITE, SOCIAL } from '../consts';
+
+const title = `Research — ${SITE.fullName}`;
+const description =
+  'Doctoral research merging Bayesian optimization with agentic systems for functional genomics, plus an independent manuscript on feedback mechanisms.';
+
+const items = [
+  {
+    eyebrow: 'Doctoral research',
+    title: 'BioPrimer Framework & AutoBioLoop',
+    status: 'Ongoing',
+    meta: [
+      {
+        label: 'Affiliation',
+        value:
+          'Doctoral research, Department of Computer Science, The Islamia University of Bahawalpur, under the supervision of Dr. Arif Mehmood.',
+      },
+    ],
+    description:
+      'An AI-driven research architecture that merges Bayesian optimization with agentic systems, directed toward functional genomics and the discovery of T-cell regulatory networks. The work includes the AutoBioLoop paradigm, which applies these methods to AI-driven CRISPR experiment design. The methodology was rebuilt from the ground up in 2026 to ensure rigorous factual grounding throughout.',
+  },
+  {
+    eyebrow: 'Publication',
+    title: 'Feedback Blindness',
+    status: 'Under peer review',
+    meta: [{ label: 'Type', value: 'Independent academic manuscript.' }],
+    description:
+      'A manuscript examining the systemic decay and blind spots inherent in evaluative feedback mechanisms.',
+  },
+];
+---
+
+<Layout title={title} description={description}>
+  <section class="page-hero">
+    <div class="wrap">
+      <SectionHeading eyebrow="Doctoral work" title="Research" level={1}>
+        Doctoral research at the intersection of AI and the life sciences, plus an
+        independent manuscript under review. Measured summaries below; details available on
+        request.
+      </SectionHeading>
+    </div>
+  </section>
+
+  <section class="research-section">
+    <div class="wrap research-list">
+      {
+        items.map((item) => (
+          <article class="research-item">
+            <div class="ri-head">
+              <p class="ri-eyebrow font-mono">{item.eyebrow}</p>
+              <StatusBadge category="research-tool" label={item.status} />
+            </div>
+            <h2 class="ri-title">{item.title}</h2>
+            <dl class="ri-meta">
+              {item.meta.map((m) => (
+                <div class="ri-meta-row">
+                  <dt class="font-mono">{m.label}</dt>
+                  <dd>{m.value}</dd>
+                </div>
+              ))}
+            </dl>
+            <p class="ri-desc">{item.description}</p>
+          </article>
+        ))
+      }
+
+      {
+        SOCIAL.scholar && (
+          <p class="scholar-link">
+            <a href={SOCIAL.scholar} target="_blank" rel="noopener noreferrer">
+              View on Google Scholar / ORCID ↗
+            </a>
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  <CTA
+    title="Open to research collaboration."
+    text="If our work overlaps — AI for genomics, optimization, or evaluation methods — I’d welcome a conversation."
+  />
+</Layout>
+
+<style>
+  .page-hero {
+    padding-block: clamp(3rem, 7vw, 5rem) clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .research-section {
+    padding-block: clamp(1rem, 3vw, 2rem) clamp(2rem, 5vw, 3rem);
+  }
+  .research-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 60rem;
+  }
+  .research-item {
+    padding: clamp(1.75rem, 4vw, 2.5rem);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: color-mix(in oklab, var(--paper) 100%, var(--ink) 2%);
+  }
+  .ri-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  .ri-eyebrow {
+    margin: 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .ri-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin: 0 0 1.25rem;
+  }
+  .ri-meta {
+    margin: 0 0 1.25rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .ri-meta-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+  @media (min-width: 640px) {
+    .ri-meta-row {
+      grid-template-columns: 9rem 1fr;
+      gap: 1rem;
+    }
+  }
+  .ri-meta dt {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding-top: 0.15rem;
+  }
+  .ri-meta dd {
+    margin: 0;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .ri-desc {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    line-height: 1.75;
+    max-width: 68ch;
+  }
+  .scholar-link a {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+  }
+</style>

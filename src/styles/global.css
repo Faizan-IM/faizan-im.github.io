@@ -1,0 +1,305 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Design tokens. Semantic colors live as plain CSS variables so they can flip
+   with [data-theme]; @theme inline exposes them to Tailwind utilities
+   (bg-paper, text-ink, border-line, text-accent, …) without freezing values.
+   ───────────────────────────────────────────────────────────────────────── */
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+
+  --font-display: "Fraunces Variable", "Fraunces", Georgia, "Times New Roman", serif;
+  --font-sans: "Hanken Grotesk Variable", "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, "SFMono-Regular", "Consolas", monospace;
+}
+
+:root {
+  --paper: #faf8f3; /* warm off-white background */
+  --ink: #17150f; /* near-black text */
+  --ink-soft: #514c40; /* secondary text */
+  --line: #e6e1d6; /* hairline borders/dividers */
+  --accent: #1f5c4d; /* one confident accent — deep green */
+  --accent-2: #c6512b; /* rare secondary highlight */
+  --dot: rgba(23, 21, 15, 0.06); /* motif dot color */
+  --status-production: #2f9e6f;
+  --status-active: #cf922f;
+  --status-research: #5b7fb3;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --paper: #121110;
+  --ink: #f4f1e9;
+  --ink-soft: #a8a294;
+  --line: #2a2824;
+  --accent: #6fb39e;
+  --accent-2: #e0744b;
+  --dot: rgba(244, 241, 233, 0.07);
+  --status-production: #5cc79a;
+  --status-active: #e6ad4d;
+  --status-research: #89a9da;
+  color-scheme: dark;
+}
+
+/* ─── Base ─── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem; /* sticky-nav offset for anchor jumps */
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem; /* ~17px */
+    line-height: 1.6;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern";
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 460;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-optical-sizing: auto;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  p { text-wrap: pretty; }
+
+  a {
+    color: inherit;
+    text-decoration-color: color-mix(in oklab, var(--accent) 45%, transparent);
+    text-underline-offset: 0.18em;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--accent) 26%, transparent);
+    color: var(--ink);
+  }
+
+  /* Visible, consistent keyboard focus everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  img { max-width: 100%; height: auto; }
+
+  /* Skip-link target is programmatically focused — don't draw a ring on it. */
+  main:focus { outline: none; }
+
+  /* Tabular figures wherever the mono motif carries numbers. */
+  .font-mono,
+  [class*="font-mono"] {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1, "cv01" 1;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Utilities + motif
+   ───────────────────────────────────────────────────────────────────────── */
+@layer utilities {
+  /* Content width wrapper. */
+  .wrap {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 640px) {
+    .wrap { padding-inline: 2rem; }
+  }
+
+  /* Prose measure for long-form reading. */
+  .measure { max-width: 68ch; }
+
+  /* Skip link — visible on focus only. */
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -3rem;
+    z-index: 200;
+    padding: 0.6rem 1rem;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: top 0.2s ease;
+  }
+  .skip-link:focus { top: 1rem; }
+
+  /* The motif: faint dotted grid. Decorative — always aria-hidden in markup. */
+  .dot-grid {
+    background-image: radial-gradient(var(--dot) 1px, transparent 1px);
+    background-size: 22px 22px;
+    background-position: -1px -1px;
+  }
+
+  /* Hairline gradient divider echoing the accent. */
+  .rule-accent {
+    height: 1px;
+    border: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--line),
+      color-mix(in oklab, var(--accent) 55%, var(--line)),
+      var(--line),
+      transparent
+    );
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Motion: one orchestrated page-load reveal. CSS-only, fully disabled under
+   prefers-reduced-motion. Elements are visible by default (no JS gate), so the
+   site degrades to fully-shown content if motion is off or JS is absent.
+   ───────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--reveal-delay, 0s);
+  }
+  .reveal-1 { --reveal-delay: 0.06s; }
+  .reveal-2 { --reveal-delay: 0.14s; }
+  .reveal-3 { --reveal-delay: 0.22s; }
+  .reveal-4 { --reveal-delay: 0.30s; }
+  .reveal-5 { --reveal-delay: 0.38s; }
+  .reveal-6 { --reveal-delay: 0.46s; }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Prose — long-form typographic wrapper for case-study + About bodies.
+   ───────────────────────────────────────────────────────────────────────── */
+.prose {
+  max-width: 68ch;
+  color: var(--ink-soft);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+.prose > * + * { margin-top: 1.15em; }
+.prose h2,
+.prose h3 {
+  color: var(--ink);
+  margin-top: 2em;
+  margin-bottom: 0.4em;
+}
+.prose h2 { font-size: 1.6rem; }
+.prose h3 { font-size: 1.25rem; }
+.prose strong { color: var(--ink); font-weight: 600; }
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.25rem;
+}
+.prose li { margin-top: 0.4em; }
+.prose li::marker { color: var(--accent); }
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: color-mix(in oklab, var(--ink) 6%, transparent);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+.prose blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: 1rem;
+  font-style: italic;
+  color: var(--ink);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Shared button system — used by hero, CTA, contact, tutoring, case studies.
+   ───────────────────────────────────────────────────────────────────────── */
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.72rem 1.4rem;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease,
+      border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .btn-primary:hover {
+    background: var(--accent);
+    box-shadow: 0 10px 24px color-mix(in oklab, var(--accent) 30%, transparent);
+  }
+  .btn-outline {
+    border-color: var(--line);
+    color: var(--ink);
+    background: transparent;
+  }
+  .btn-outline:hover {
+    border-color: color-mix(in oklab, var(--accent) 55%, var(--line));
+    color: var(--accent);
+    background: color-mix(in oklab, var(--accent) 7%, transparent);
+  }
+  .btn svg {
+    flex-shrink: 0;
+  }
+}

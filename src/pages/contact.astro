@@ -1,0 +1,184 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { SITE, SOCIAL } from '../consts';
+
+const title = `Contact — ${SITE.fullName}`;
+const description =
+  'Get in touch about a build, technical writing, research collaboration, or O/A Level tutoring. Based in Bahawalpur, available for remote work worldwide.';
+
+const methods = [
+  { key: 'email', label: 'Email', value: SITE.email, href: `mailto:${SITE.email}`, external: false },
+  SOCIAL.linkedin && { key: 'linkedin', label: 'LinkedIn', value: 'in/faizan-iqbal-masood', href: SOCIAL.linkedin, external: true },
+  SOCIAL.github && { key: 'github', label: 'GitHub', value: 'github.com/Faizan-IM', href: SOCIAL.github, external: true },
+].filter(Boolean) as { key: string; label: string; value: string; href: string; external: boolean }[];
+---
+
+<Layout title={title} description={description}>
+  <section class="page-hero">
+    <div class="wrap">
+      <SectionHeading eyebrow="Get in touch" title="Contact" level={1}>
+        Whether you need a system built, a technical writer, a research collaborator, or a
+        tutor for your child — send a note and I'll reply personally.
+      </SectionHeading>
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="wrap contact-grid">
+      <div class="contact-main">
+        <a href={`mailto:${SITE.email}`} class="email-card">
+          <span class="email-kicker font-mono">Email me directly</span>
+          <span class="email-address">{SITE.email}</span>
+          <span class="email-arrow" aria-hidden="true">→</span>
+        </a>
+
+        <ul class="method-list">
+          {
+            methods
+              .filter((m) => m.key !== 'email')
+              .map((m) => (
+                <li>
+                  <a
+                    href={m.href}
+                    class="method"
+                    {...(m.external ? { target: '_blank', rel: 'me noopener noreferrer' } : {})}
+                  >
+                    <span class="method-label font-mono">{m.label}</span>
+                    <span class="method-value">{m.value}</span>
+                    <span class="method-arrow" aria-hidden="true">↗</span>
+                  </a>
+                </li>
+              ))
+          }
+        </ul>
+      </div>
+
+      <aside class="availability">
+        <h2 class="aside-label font-mono">Availability</h2>
+        <p class="avail-text">{SITE.location}</p>
+        <p class="avail-text">
+          Comfortable working with US-based clients and fully remote teams across time zones.
+        </p>
+        <p class="avail-note font-mono">I read every message and reply personally.</p>
+      </aside>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-hero {
+    padding-block: clamp(3rem, 7vw, 5rem) clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .contact-section {
+    padding-block: clamp(1rem, 3vw, 2rem) clamp(3rem, 7vw, 5rem);
+  }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  @media (min-width: 860px) {
+    .contact-grid {
+      grid-template-columns: minmax(0, 1fr) 18rem;
+      gap: 4rem;
+      align-items: start;
+    }
+  }
+
+  .email-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: clamp(1.75rem, 4vw, 2.5rem);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: color-mix(in oklab, var(--paper) 100%, var(--ink) 3%);
+    text-decoration: none;
+    color: var(--ink);
+    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .email-card:hover {
+    border-color: color-mix(in oklab, var(--accent) 45%, var(--line));
+    transform: translateY(-3px);
+    box-shadow: 0 16px 40px color-mix(in oklab, var(--ink) 9%, transparent);
+  }
+  .email-kicker {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .email-address {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    word-break: break-word;
+  }
+  .email-arrow {
+    position: absolute;
+    top: clamp(1.75rem, 4vw, 2.5rem);
+    right: clamp(1.75rem, 4vw, 2.5rem);
+    color: var(--accent);
+    font-size: 1.5rem;
+  }
+
+  .method-list {
+    list-style: none;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .method {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--paper);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .method:hover {
+    border-color: color-mix(in oklab, var(--accent) 40%, var(--line));
+    transform: translateX(4px);
+  }
+  .method-label {
+    width: 6rem;
+    flex-shrink: 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .method-value {
+    flex: 1;
+    color: var(--ink-soft);
+    word-break: break-word;
+  }
+  .method-arrow {
+    color: var(--accent);
+  }
+
+  .availability .aside-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.9rem;
+  }
+  .avail-text {
+    margin: 0 0 1rem;
+    color: var(--ink-soft);
+    line-height: 1.65;
+  }
+  .avail-note {
+    margin: 1.5rem 0 0;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+</style>

@@ -1,0 +1,76 @@
+---
+import { SOCIAL } from '../consts';
+
+interface Props {
+  title?: string;
+  text?: string;
+  primaryHref?: string;
+  primaryLabel?: string;
+  secondaryHref?: string | null;
+  secondaryLabel?: string;
+}
+
+const {
+  title = "Let's work together.",
+  text = 'Tutoring, technical writing, a build, or a research collaboration — tell me what you need and I’ll reply personally.',
+  primaryHref = '/contact',
+  primaryLabel = 'Get in touch',
+  secondaryHref = SOCIAL.linkedin,
+  secondaryLabel = 'Connect on LinkedIn',
+} = Astro.props;
+
+const secondaryExternal = Boolean(secondaryHref && secondaryHref.startsWith('http'));
+---
+
+<section class="cta">
+  <div class="wrap">
+    <div class="cta-panel dot-grid">
+      <h2 class="cta-title">{title}</h2>
+      <p class="cta-text">{text}</p>
+      <div class="cta-actions">
+        <a href={primaryHref} class="btn btn-primary">{primaryLabel}</a>
+        {
+          secondaryHref && (
+            <a
+              href={secondaryHref}
+              class="btn btn-outline"
+              {...(secondaryExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            >
+              {secondaryLabel}
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    margin-top: 5rem;
+  }
+  .cta-panel {
+    text-align: center;
+    padding: clamp(2.5rem, 6vw, 4.5rem) 1.5rem;
+    background-color: color-mix(in oklab, var(--paper) 100%, var(--ink) 3%);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+  }
+  .cta-title {
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    margin: 0 0 0.9rem;
+  }
+  .cta-text {
+    max-width: 48ch;
+    margin: 0 auto 2rem;
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+  .cta-actions {
+    display: flex;
+    gap: 0.9rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>

@@ -1,0 +1,193 @@
+---
+import { NAV_LINKS, SITE } from '../consts';
+import ThemeToggle from './ThemeToggle.astro';
+
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
+---
+
+<header class="site-header">
+  <nav class="wrap nav" aria-label="Primary">
+    <a href="/" class="brand" aria-label={`${SITE.shortName} — home`}>
+      <span class="brand-mark" aria-hidden="true">/</span>{SITE.shortName}
+    </a>
+
+    <ul class="nav-links">
+      {
+        NAV_LINKS.map((l) => (
+          <li>
+            <a
+              href={l.href}
+              class:list={['nav-link', { active: isActive(l.href) }]}
+              aria-current={isActive(l.href) ? 'page' : undefined}
+            >
+              {l.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="nav-right">
+      <ThemeToggle />
+
+      <details class="nav-mobile">
+        <summary aria-label="Toggle menu">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </summary>
+        <ul class="nav-mobile-list">
+          {
+            NAV_LINKS.map((l) => (
+              <li>
+                <a
+                  href={l.href}
+                  aria-current={isActive(l.href) ? 'page' : undefined}
+                  class:list={['nav-link', { active: isActive(l.href) }]}
+                >
+                  {l.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </details>
+    </div>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: color-mix(in oklab, var(--paper) 82%, transparent);
+    backdrop-filter: blur(12px) saturate(1.1);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 4rem;
+  }
+
+  .brand {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    color: var(--ink);
+    flex-shrink: 0;
+  }
+  .brand-mark {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    margin-right: 0.05em;
+  }
+
+  .nav-links {
+    display: none;
+    align-items: center;
+    gap: 1.6rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .nav-link:hover {
+    color: var(--ink);
+  }
+  .nav-link.active {
+    color: var(--accent);
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+  }
+
+  /* Mobile disclosure menu — works without JS via <details>. */
+  .nav-mobile {
+    position: relative;
+  }
+  .nav-mobile summary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.25rem;
+    width: 2.25rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    list-style: none;
+  }
+  .nav-mobile summary::-webkit-details-marker {
+    display: none;
+  }
+  .nav-mobile[open] summary {
+    color: var(--accent);
+    border-color: color-mix(in oklab, var(--accent) 50%, var(--line));
+  }
+  .nav-mobile-list {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.6rem);
+    min-width: 12rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0.6rem;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 0 16px 40px color-mix(in oklab, var(--ink) 14%, transparent);
+  }
+  .nav-mobile-list .nav-link {
+    display: block;
+    padding: 0.55rem 0.7rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+  }
+  .nav-mobile-list .nav-link:hover {
+    background: color-mix(in oklab, var(--ink) 5%, transparent);
+  }
+
+  @media (min-width: 820px) {
+    .nav-links {
+      display: flex;
+    }
+    .nav-mobile {
+      display: none;
+    }
+  }
+</style>

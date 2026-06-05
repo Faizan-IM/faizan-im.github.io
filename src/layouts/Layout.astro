@@ -1,0 +1,38 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+}
+
+const { title, description, image, type, noindex } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead
+      title={title}
+      description={description}
+      image={image}
+      type={type}
+      noindex={noindex}
+    >
+      <slot name="head" />
+    </BaseHead>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <Nav />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

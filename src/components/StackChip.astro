@@ -1,0 +1,23 @@
+---
+interface Props {
+  label?: string;
+}
+const { label } = Astro.props;
+---
+
+<span class="stack-chip font-mono">{label}<slot /></span>
+
+<style>
+  .stack-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--paper);
+    white-space: nowrap;
+  }
+</style>

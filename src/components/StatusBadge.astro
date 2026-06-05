@@ -1,0 +1,52 @@
+---
+interface Props {
+  category: 'production' | 'active' | 'research-tool' | 'planned';
+  /** The exact status string from the project frontmatter. */
+  label: string;
+}
+
+const { category, label } = Astro.props;
+const variant = category === 'research-tool' ? 'research' : category;
+---
+
+<span class="status-badge font-mono" data-variant={variant}>
+  <span class="dot" aria-hidden="true"></span>
+  {label}
+</span>
+
+<style>
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+    background: color-mix(in oklab, var(--ink) 4%, transparent);
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ink-soft);
+    flex-shrink: 0;
+  }
+  [data-variant='production'] .dot {
+    background: var(--status-production);
+  }
+  [data-variant='active'] .dot {
+    background: var(--status-active);
+  }
+  [data-variant='research'] .dot {
+    background: var(--status-research);
+  }
+  [data-variant='planned'] .dot {
+    background: var(--ink-soft);
+    opacity: 0.6;
+  }
+</style>

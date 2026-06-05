@@ -1,0 +1,58 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { SITE } from '../consts';
+
+const title = `Page not found — ${SITE.fullName}`;
+---
+
+<Layout title={title} description="The page you’re looking for doesn’t exist." noindex>
+  <section class="notfound">
+    <div class="wrap nf-inner">
+      <p class="nf-code font-mono">404</p>
+      <h1 class="nf-title">This page wandered off.</h1>
+      <p class="nf-text">
+        The link may be broken or the page may have moved. Let's get you back on track.
+      </p>
+      <div class="nf-actions">
+        <a href="/" class="btn btn-primary">Back home</a>
+        <a href="/work" class="btn btn-outline">See the work</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .notfound {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    padding-block: clamp(3rem, 10vw, 7rem);
+  }
+  .nf-inner {
+    text-align: center;
+  }
+  .nf-code {
+    font-size: clamp(3.5rem, 12vw, 6rem);
+    font-weight: 500;
+    color: var(--accent-2); /* the one rare, deliberate use of the secondary accent */
+    line-height: 1;
+    margin: 0 0 1rem;
+    letter-spacing: -0.03em;
+  }
+  .nf-title {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    margin: 0 0 1rem;
+  }
+  .nf-text {
+    color: var(--ink-soft);
+    max-width: 42ch;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+  .nf-actions {
+    display: flex;
+    gap: 0.9rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>

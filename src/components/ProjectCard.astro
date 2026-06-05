@@ -1,0 +1,198 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import StatusBadge from './StatusBadge.astro';
+import StackChip from './StackChip.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  /** Wide, asymmetric layout — used for the lead featured project. */
+  featured?: boolean;
+}
+
+const { project, featured = false } = Astro.props;
+const { data } = project;
+const href = `/work/${project.id}`;
+
+const maxChips = featured ? 6 : 4;
+const chips = data.stack.slice(0, maxChips);
+const extra = data.stack.length - chips.length;
+const keyMetric = data.metrics[0];
+---
+
+<article class:list={['card', { featured }]}>
+  <div class="card-body">
+    <div class="card-top">
+      <StatusBadge category={data.category} label={data.status} />
+    </div>
+    <h3 class="card-title">
+      <a href={href} class="card-link">{data.title}</a>
+    </h3>
+    <p class="card-headline">{data.headline}</p>
+  </div>
+
+  <div class="card-meta">
+    <div class="chips">
+      {chips.map((s) => <StackChip label={s} />)}
+      {extra > 0 && <span class="more font-mono">+{extra}</span>}
+    </div>
+    {
+      keyMetric && (
+        <p class="key-metric font-mono">
+          <span class="key-metric-dot" aria-hidden="true" />
+          {keyMetric}
+        </p>
+      )
+    }
+    <span class="card-arrow font-mono" aria-hidden="true">Read case study →</span>
+  </div>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    height: 100%;
+    padding: 1.75rem;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  /* Accent bar that grows on hover — quiet motif echo. */
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 0;
+    background: var(--accent);
+    transition: height 0.35s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in oklab, var(--accent) 35%, var(--line));
+    box-shadow: 0 16px 40px color-mix(in oklab, var(--ink) 9%, transparent);
+  }
+  .card:hover::before {
+    height: 100%;
+  }
+  .card:focus-within {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .card-top {
+    display: flex;
+  }
+  .card-title {
+    font-size: 1.4rem;
+    line-height: 1.15;
+    margin: 0;
+  }
+  /* Stretched link — whole card clickable, accessible name = title. */
+  .card-link {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .card-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .card-link:focus-visible {
+    outline: none;
+  }
+  .card-headline {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-top: auto;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-items: center;
+  }
+  .more {
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+  }
+  .key-metric {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .key-metric-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .card-arrow {
+    font-size: 0.75rem;
+    color: var(--accent);
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .card:hover .card-arrow {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Wide, asymmetric featured layout. */
+  @media (min-width: 760px) {
+    .card.featured {
+      flex-direction: row;
+      align-items: stretch;
+      gap: 2.5rem;
+      padding: 2.5rem;
+    }
+    .card.featured .card-body {
+      flex: 1.4;
+      justify-content: center;
+    }
+    .card.featured .card-meta {
+      flex: 1;
+      justify-content: center;
+      padding-left: 2.5rem;
+      border-left: 1px solid var(--line);
+      margin-top: 0;
+    }
+    .card.featured .card-title {
+      font-size: 1.9rem;
+    }
+    .card.featured .card-headline {
+      font-size: 1.05rem;
+      -webkit-line-clamp: 6;
+      line-clamp: 6;
+    }
+  }
+</style>

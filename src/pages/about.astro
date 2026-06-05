@@ -1,0 +1,236 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import StackChip from '../components/StackChip.astro';
+import CTA from '../components/CTA.astro';
+import profile from '../assets/profile.jpg';
+import { SITE } from '../consts';
+
+const title = `About — ${SITE.fullName}`;
+const description =
+  'Builder, researcher, educator. The polymath story tying together a US data pipeline, doctoral AI-for-genomics research, and years of O/A Level Maths & Physics teaching.';
+
+const worksWith = [
+  'Python',
+  'TypeScript',
+  'Astro',
+  'FastAPI',
+  'Next.js',
+  'Postgres + PostGIS',
+  'DuckDB',
+  'Polars',
+  'Playwright',
+  'Local LLMs (Ollama · Qwen)',
+  'Bayesian optimization',
+  'SQLite',
+];
+
+const quickLinks = [
+  { href: '/work', label: 'See the engineering work', kicker: 'Work' },
+  { href: '/research', label: 'Read about the research', kicker: 'Research' },
+  { href: '/tutoring', label: 'Explore tutoring', kicker: 'Tutoring' },
+  { href: '/contact', label: 'Get in touch', kicker: 'Contact' },
+];
+---
+
+<Layout title={title} description={description}>
+  <section class="about-hero">
+    <div class="wrap about-hero-inner">
+      <div class="about-portrait">
+        <Image
+          src={profile}
+          alt={`Portrait of ${SITE.fullName}`}
+          widths={[180, 260, 360]}
+          sizes="(max-width: 640px) 40vw, 220px"
+          loading="eager"
+          class="portrait-img"
+        />
+      </div>
+      <div>
+        <p class="about-eyebrow font-mono">
+          <span class="eyebrow-rule" aria-hidden="true"></span>About
+        </p>
+        <h1 class="about-title">Builder, researcher, educator.</h1>
+        <p class="about-sub">{SITE.location}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-body">
+    <div class="wrap about-grid">
+      <div class="about-story prose">
+        <p>
+          I'm Faizan — a CS PhD scholar and solo software engineer based in Bahawalpur,
+          Pakistan. I build production systems that turn messy real-world data into
+          decisions, usually alone and under real constraints: a US national real-estate
+          pipeline targeting ~140M parcels on $0 infrastructure; Outdial, an AI
+          outbound-sales platform with a real telephony stack; and a set of lead-generation
+          tools that have been used in commerce. Alongside that, my doctoral research applies
+          Bayesian optimization and agentic systems to functional genomics. And for years
+          I've taught O and A Level Mathematics and Physics — which, more than anything,
+          taught me how to take something complex and make it land.
+        </p>
+        <p>
+          The common thread across all three is the same instinct: take complexity — 140M
+          records, a research pipeline, or a hard physics idea — and make it usable.
+        </p>
+      </div>
+
+      <aside class="about-aside">
+        <h2 class="aside-label font-mono">What I work with</h2>
+        <div class="tech-chips">
+          {worksWith.map((t) => <StackChip label={t} />)}
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="about-links-section">
+    <div class="wrap">
+      <div class="quick-links">
+        {
+          quickLinks.map((l) => (
+            <a href={l.href} class="quick-link">
+              <span class="ql-kicker font-mono">{l.kicker}</span>
+              <span class="ql-label">{l.label}</span>
+              <span class="ql-arrow" aria-hidden="true">→</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CTA />
+</Layout>
+
+<style>
+  .about-hero {
+    padding-block: clamp(3rem, 7vw, 5rem) clamp(1.5rem, 3vw, 2rem);
+  }
+  .about-hero-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2rem;
+  }
+  .about-portrait {
+    width: clamp(110px, 30vw, 160px);
+    flex-shrink: 0;
+  }
+  .about-portrait :global(.portrait-img) {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    display: block;
+  }
+  .about-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.9rem;
+  }
+  .eyebrow-rule {
+    width: 26px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+  .about-title {
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    margin: 0 0 0.6rem;
+  }
+  .about-sub {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 1rem;
+  }
+
+  .about-body {
+    padding-block: clamp(1.5rem, 4vw, 2.5rem);
+  }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  @media (min-width: 900px) {
+    .about-grid {
+      grid-template-columns: minmax(0, 1fr) 15rem;
+      gap: 4rem;
+      align-items: start;
+    }
+  }
+  .about-story {
+    font-size: 1.15rem;
+  }
+  .about-aside .aside-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.9rem;
+  }
+  @media (min-width: 900px) {
+    .about-aside {
+      position: sticky;
+      top: 5.5rem;
+    }
+  }
+  .tech-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .about-links-section {
+    padding-block: clamp(2rem, 5vw, 3rem);
+  }
+  .quick-links {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  @media (min-width: 640px) {
+    .quick-links {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .quick-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--paper);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .quick-link:hover {
+    border-color: color-mix(in oklab, var(--accent) 40%, var(--line));
+    transform: translateX(4px);
+  }
+  .ql-kicker {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    width: 5.5rem;
+    flex-shrink: 0;
+  }
+  .ql-label {
+    flex: 1;
+    font-weight: 500;
+  }
+  .ql-arrow {
+    color: var(--accent);
+  }
+</style>

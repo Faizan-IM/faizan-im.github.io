@@ -1,0 +1,112 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import CTA from '../../components/CTA.astro';
+import { SITE } from '../../consts';
+
+const all = (await getCollection('projects')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const groupDefs = [
+  {
+    key: 'production',
+    title: 'Production & shipping',
+    note: 'Shipped, in delivery, or already operating in commerce.',
+  },
+  {
+    key: 'active',
+    title: 'Active build',
+    note: 'In progress with the architecture locked.',
+  },
+  {
+    key: 'research-tool',
+    title: 'Research & validation',
+    note: 'MVPs that prove an approach end-to-end.',
+  },
+  {
+    key: 'planned',
+    title: 'Planned & deferred',
+    note: 'Strategy artifacts — deliberately scoped, costed, and not built yet.',
+  },
+] as const;
+
+const groups = groupDefs
+  .map((g) => ({ ...g, items: all.filter((p) => p.data.category === g.key) }))
+  .filter((g) => g.items.length > 0);
+
+const title = `Work · Engineering — ${SITE.fullName}`;
+const description =
+  'Software projects — data pipelines, AI sales tooling, lead-generation engines, and vertical-SaaS strategy work. Repos are private; each project has a full case study.';
+---
+
+<Layout title={title} description={description}>
+  <section class="page-hero">
+    <div class="wrap">
+      <SectionHeading eyebrow="Engineering" title="Work" level={1}>
+        Seven projects across data engineering, AI tooling, and product strategy — built
+        solo, under real constraints. Project repos are private; the case studies tell the
+        full story.
+      </SectionHeading>
+    </div>
+  </section>
+
+  {
+    groups.map((group) => (
+      <section class="work-group">
+        <div class="wrap">
+          <div class="group-head">
+            <h2 class="group-title">{group.title}</h2>
+            <p class="group-note font-mono">{group.note}</p>
+          </div>
+          <div class="work-grid">
+            {group.items.map((p) => (
+              <ProjectCard project={p} />
+            ))}
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <CTA
+    title="Have something that needs building?"
+    text="I take on solo builds, data pipelines, and AI tooling — and I’m candid about what’s feasible."
+  />
+</Layout>
+
+<style>
+  .page-hero {
+    padding-block: clamp(3rem, 7vw, 5rem) clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .work-group {
+    padding-block: clamp(2rem, 4vw, 3rem);
+  }
+  .group-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.75rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .group-title {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+  .group-note {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.01em;
+  }
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr));
+    gap: 1.5rem;
+  }
+</style>
